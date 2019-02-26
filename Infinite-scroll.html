@@ -1,0 +1,177 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Infinite Scroll</title>
+    <style ref="stylesheet">
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background-color: blanchedalmond;
+        text-align: center;
+      }
+      .box {
+        width: 33.33%;
+        height: auto;
+        float: left;
+        margin: 2px;
+        padding: 10px;
+        box-shadow: 0 0 5px #777;
+      }
+      .box:nth-child(3n + 1) {
+        clear: both;
+      }
+      .gen-img {
+        width: 100%;
+        height: auto;
+      }
+      #scroll-top {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #fff;
+        background-image: url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.4.8/ionicons/svg/md-arrow-up.svg");
+        cursor: pointer;
+        box-shadow: 0 0 3px #f00;
+      }
+      #scroll-top:hover {
+        background-color: #777;
+      }
+      #loader {
+        clear: both;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Infinite Scroll With Random Colored Boxes</h1>
+    <div id="container"></div>
+    <div id="loader" style="display:none">
+      <img
+        src="https://res.cloudinary.com/chuloo/image/upload/v1550093026/scotch-logo-gif_jq4tgr.gif"
+        alt="loading"
+      />
+    </div>
+    <div id="scroll-top"></div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(function() {
+        (function() {
+          generateBoxesWithImage(10);
+          // loadBoxes(10);
+        })();
+
+        $(window).on("scroll", function() {
+          let scrolled = $(window).scrollTop() + screen.availHeight;
+          if (scrolled > $(document).height() + 50) {
+            //alert("Generate more images");
+            generateBoxesWithImage(5);
+            // loadBoxes(10);
+          }
+        });
+
+        $("#scroll-top").on("click", function() {
+          $("html, body").animate(
+            {
+              scrollTop: 0
+            },
+            1000
+          );
+        });
+      });
+
+      function generateBox() {
+        let r = Math.floor(Math.random() * 256);
+        let g = Math.floor(Math.random() * 256);
+        let b = Math.floor(Math.random() * 256);
+        let h = Math.floor(Mahth.random() * 300) + 200;
+        let div = document.createElement("div");
+        div.classList.add("box");
+        div.style.backgroundColor = `rgb(${r} ${g} ${b})`;
+        div.style.height = `${h}px`;
+        document.getElementById("container").appendChild(div);
+      }
+
+      function generateBoxWithImage() {
+        const count = 10;
+        let imgNum = Math.floor(Math.random() * count);
+        const loader = document.getElementById("loader");
+        let url = `https://source.unsplash.com/random/400x400/?sig=${imgNum}`;
+
+        let r = Math.floor(Math.random() * 256);
+        let g = Math.floor(Math.random() * 256);
+        let b = Math.floor(Math.random() * 256);
+
+        loader.style.display = "block";
+        fetch(alt_url)
+          .then(res => {
+            let img = document.createElement("img");
+            let div = document.createElement("div");
+
+            img.setAttribute("src", res.url);
+            img.classList.add("gen-img");
+
+            div.classList.add("box");
+            div.style.backgroundColor = `rgb(${r} ${g} ${b})`;
+            div.appendChild(img);
+
+            document.getElementById("container").appendChild(div);
+            loader.style.display = "none";
+          })
+          .catch(err => {
+            alert("An Error has occured:\n" + err);
+          });
+      }
+
+      function generateBoxesWithImage(imgNum = 10) {
+        const loader = document.getElementById("loader");
+        let p_key =
+          "ff6ebc78aa977877f832650bc4203d2dfc118be64aac6a0847fe95388d760b42";
+        let alt_url = `https://api.unsplash.com/photos/random?client_id=${p_key}&count=${imgNum}`;
+
+        loader.style.display = "block";
+        fetch(alt_url)
+          .then(res => res.json())
+          .then(res => {
+            for (ele in res) {
+              let r = Math.floor(Math.random() * 256);
+              let g = Math.floor(Math.random() * 256);
+              let b = Math.floor(Math.random() * 256);
+              let img = document.createElement("img");
+              let div = document.createElement("div");
+
+              // img.setAttribute("src", res[ele].urls.raw + "&w=400&h=500");
+              img.setAttribute("src", res[ele].urls.small);
+              img.setAttribute("alt", res[ele].description);
+              img.classList.add("gen-img");
+
+              div.classList.add("box");
+              div.style.backgroundColor = `rgb(${r} ${g} ${b})`;
+              div.style.height = img.style.height;
+              div.appendChild(img);
+
+              document.getElementById("container").appendChild(div);
+            }
+
+            loader.style.display = "none";
+          })
+          .catch(err => {
+            alert("An Error has occured:\n" + err);
+          });
+      }
+
+      function loadBoxes(num = 10) {
+        for (let i = 0; i < num; i++) {
+          //generateBoxWithImage();
+          generateBox();
+        }
+      }
+    </script>
+  </body>
+</html>
