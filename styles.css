@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background-color: blanchedalmond;
+  text-align: center;
+}
+.box {
+  width: 32%;
+  height: auto;
+  float: left;
+  margin: 2px;
+  padding: 10px;
+  box-shadow: 0 0 5px #777;
+}
+.box:nth-child(3n + 1) {
+  clear: both;
+}
+.gen-img {
+  width: 100%;
+  height: auto;
+}
+#scroll-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  background-image: url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.4.8/ionicons/svg/md-arrow-up.svg");
+  cursor: pointer;
+  box-shadow: 0 0 3px #f00;
+}
+#scroll-top:hover {
+  background-color: #777;
+}
+#loading {
+  clear: both;
+}
